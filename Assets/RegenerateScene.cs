@@ -36,16 +36,17 @@ public class RegenerateScene : MonoBehaviour
             // Make it a child of the solar system object
             planet.transform.parent = solarSystem.transform;
 
-            
             // Add a RotateAround component to the planet object and get its reference
             RotateAround rotateAround = planet.AddComponent<RotateAround>();
 
             // Set its speed to a random value between 0 and 5
             rotateAround.speed = Random.Range(0f, 5f);
 
-            rotateAround.target = sun;
+            // Add a SelfRotate component to the planet object
+            planet.AddComponent<SelfRotate>();
         }
     }
+
 
     private void Update()
     {
