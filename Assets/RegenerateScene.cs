@@ -6,8 +6,9 @@ public class RegenerateScene : MonoBehaviour
     public GameObject sunPrefab; // The prefab for the sun
     public GameObject[] planetPrefabs; // The prefabs for the planets
     public float[] distances; // The distances of each planet from the sun
+    public GameObject blackHolePrefab; // The prefab for the black hole
 
-    private void Start()
+    public void Start()
     {
         // Create a new game object for holding the solar system
         GameObject solarSystem = new GameObject("Solar System");
@@ -49,34 +50,18 @@ public class RegenerateScene : MonoBehaviour
             planet.AddComponent<SelfRotate>();
         }
 
-        // Add 5 asteroids to the scene
-        int numAsteroids = 5;
-        float asteroidRadius = 100f;
-        for (int i = 0; i < numAsteroids; i++)
-        {
-            // Instantiate the asteroid prefab at a random position on a circle with the asteroid radius
-            float angle = Random.Range(0f, 360f);
-            Vector3 position = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * asteroidRadius;
-            GameObject asteroid = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            asteroid.transform.position = position;
+        // Instantiate the black hole prefab at a random position on a sphere with a radius of 500 units
+        Vector3 blackHolePosition = Random.onUnitSphere * 100f;
+        GameObject blackHole = Instantiate(blackHolePrefab, blackHolePosition, Quaternion.identity);
 
-            // Set its localScale to a random value between 1 and 5 for each axis
-            Vector3 scale3 = Vector3.one * Random.Range(1f, 5f);
-            asteroid.transform.localScale = scale3;
+        // Make it a child of the solar system object
+        blackHole.transform.parent = solarSystem.transform;
 
-            // Make it a child of the solar system object
-            asteroid.transform.parent = solarSystem.transform;
-
-            // Add the "pullable" tag to the asteroid object
-            asteroid.tag = "Actors";
-
-            // Add a Rigidbody component to the asteroid object
-            Rigidbody rb = asteroid.AddComponent<Rigidbody>();
-            rb.useGravity = false;
-        }
+        // Add the RegenerateSceneTrigger script to the black hole object
+        RegenerateSceneTrigger regenerateTrigger = blackHole.AddComponent<RegenerateSceneTrigger>();
     }
 
-    private void Update()
+    public void Update()
     {
         // If space key is pressed, reload this scene
         if (Input.GetKeyDown(KeyCode.Space))
