@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class spaceshipController : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class spaceshipController : MonoBehaviour
     private float pitch; // The pitch angle of the spaceship
     private float yaw; // The yaw angle of the spaceship
     private float roll; // The roll angle of the spaceship
+
+    public string newSceneName; //landing on a planet
 
     private void Start()
     {
@@ -33,5 +36,13 @@ public class spaceshipController : MonoBehaviour
         // Apply forces and torques to the rigidbody based on input values
         rb.AddRelativeForce(Vector3.forward * thrust);
         rb.AddRelativeTorque(pitch, yaw, roll);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("TrackingObject"))
+        {
+            SceneManager.LoadScene(1);
+        }
     }
 }
