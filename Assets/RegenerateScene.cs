@@ -57,8 +57,7 @@ public class RegenerateScene : MonoBehaviour
         // Make it a child of the solar system object
         blackHole.transform.parent = solarSystem.transform;
 
-        // Add the RegenerateSceneTrigger script to the black hole object
-        RegenerateSceneTrigger regenerateTrigger = blackHole.AddComponent<RegenerateSceneTrigger>();
+        
     }
 
     public void Update()
